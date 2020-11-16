@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Числа</title>
+    <style>
+        #field td 
+        {
+            width: 100px;
+            height: 100px;
+            border: 1px solid black;
+            text-align: center;
+            font-weight: bold;
+        }
+
+        .right
+        {
+            background-color: red;
+        }
+    </style>
+</head>
+<body>
+    <a href="index.html">Назад</a>
+	<table id="field"></table>
+	<script>
+        let size = 2; // изначальный размер поля - 2*2
+        let n = size ** 2; // максимальное число - размер поля в квадрате
+        let table = document.getElementById('field'); // получение элемента с id = "field"
+        let numMas = []; // массив со всеми числами от 1 до максимального
+        let num = 1; // номер, на который нужно нажать
+
+        function createTable() // функция создания таблицы
+        {
+            for (let i = 1; i <= n; i++) numMas.push(i); // добавление в массив всех чисел от 1 до максимального
+            for (let i = 0; i < size; i++) // создание строк и ячеек в соответсвии с выбранным размером
+            {
+                let tr = document.createElement('tr');
+                for (let j = 0; j < size; j++)
+                {
+                    let rand = Math.floor(Math.random() * Math.floor(numMas.length)); // случайное число - индекс элемента в массиве
+                    let td = document.createElement('td');
+                    td.addEventListener("click", step); // добавление использования функции step при нажатии на ячейку
+                    td.innerText = numMas[rand]; // добавление в ячейку числа из массива
+                    numMas.splice(rand, 1); // удаление добавленного числа из массива
+                    tr.appendChild(td);
+                }
+                table.appendChild(tr);
+            }
+        }
+
+        function step() // функция при нажатии на ячейку
+        {
+            if (this.textContent == num) // если число в ячейке - то, на которое нужно было нажать
+            {
+                this.classList.add("right"); // добавление к ячейке класса right с заменой ее фона
+                if (num == n) // если число, на которое нужно нажать - максимальное
+                {
+                    size += 1; // увеличение размера таблицы
+                    n = size ** 2; // перерасчет максимального числа
+                    num = 1; // нажать нужно на 1
+                    while (table.firstChild) table.removeChild(table.firstChild); // удаление всех элементов таблицы
+                    createTable(); // создание таблицы заново
+                }
+                else num += 1; // увеличение нужного номера на 1
+            }
+        }
+
+        createTable(); // создание таблицы
+    </script>
+</body>
+</html>
