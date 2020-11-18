@@ -18,10 +18,17 @@
         {
             background-color: red;
         }
+
+        #marker
+        {
+            text-align: center;
+        }
+
     </style>
 </head>
 <body>
     <a href="index.html">Назад</a>
+    <p id="marker"></p>
 	<table id="field"></table>
 	<script>
         let size = 2; // изначальный размер поля - 2*2
@@ -29,9 +36,13 @@
         let table = document.getElementById('field'); // получение элемента с id = "field"
         let numMas = []; // массив со всеми числами от 1 до максимального
         let num = 1; // номер, на который нужно нажать
+        let timeStart = 0; // время начала игры
+        let timeEnd = 0; // время конца уровня
+
 
         function createTable() // функция создания таблицы
         {
+            timeStart = Date.now(); // при создании таблицы в переменную записывается текущее время
             for (let i = 1; i <= n; i++) numMas.push(i); // добавление в массив всех чисел от 1 до максимального
             for (let i = 0; i < size; i++) // создание строк и ячеек в соответсвии с выбранным размером
             {
@@ -59,6 +70,22 @@
                     size += 1; // увеличение размера таблицы
                     n = size ** 2; // перерасчет максимального числа
                     num = 1; // нажать нужно на 1
+                    timeEnd = Date.now(); // при нажатии на последнее число в переменнную записывается текущее время
+                    let t = timeEnd - timeStart; // расчет затраченного времени
+                    let ms = t%1000; t-=ms; ms=Math.floor(ms/10);
+                    t = Math.floor (t/1000);
+                    let s = t%60; t-=s;
+                    t = Math.floor (t/60);
+                    let m = t%60; t-=m;
+                    t = Math.floor (t/60);
+                    let h = t%60;
+                    if (h<10) h='0'+h;
+                    if (m<10) m='0'+m;
+                    if (s<10) s='0'+s;
+                    if (ms<10) ms='0'+ms;
+                    // вывод затраченного времени на экран
+                    document.getElementById('marker').innerHTML = 
+                    document.getElementById('marker').textContent = h + ':' + m + ':' + s + '.' + ms + '<br>' + document.getElementById('marker').innerHTML;
                     while (table.firstChild) table.removeChild(table.firstChild); // удаление всех элементов таблицы
                     createTable(); // создание таблицы заново
                 }
